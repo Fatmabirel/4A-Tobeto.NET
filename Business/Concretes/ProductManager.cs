@@ -45,7 +45,7 @@ namespace Business.Concretes
 
         public List<Product> GetAll()
         {
-            throw new NotImplementedException();
+            return _productRepository.GetList();
 
         }
 

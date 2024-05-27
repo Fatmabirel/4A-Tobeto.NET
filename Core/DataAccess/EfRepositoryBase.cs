@@ -39,7 +39,7 @@ namespace Core.DataAccess
             return data.FirstOrDefault();
         }
 
-        public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate)
+        public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null)
         {
             IQueryable<TEntity> data = Context.Set<TEntity>();
             if(predicate != null)

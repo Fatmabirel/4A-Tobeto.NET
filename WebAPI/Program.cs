@@ -2,7 +2,6 @@
 using Business.Concretes;
 using DataAccess.Abstracts;
 using DataAccess.Concretes.EntityFramework;
-using DataAccess.Concretes.InMemory;
 using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +19,6 @@ builder.Services.AddSwaggerGen();
 
 // Transient => Her ad�mda (her talepte) yeni 1 instance.
 builder.Services.AddScoped<IProductService, ProductManager>();
-builder.Services.AddScoped<IProductRepository, InMemoryProductRepository>();
 builder.Services.AddScoped<IProductRepository, EfProductRepository>();
 builder.Services.AddDbContext<BaseDbContext>();
 
