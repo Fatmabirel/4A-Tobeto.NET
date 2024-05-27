@@ -10,6 +10,7 @@ namespace Core.CrossCuttingConcerns.Exceptions.Types
     {
         public BusinessException(string? message) : base(message)
         {
+
         }
     }
 }

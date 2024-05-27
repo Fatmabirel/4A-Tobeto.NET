@@ -16,6 +16,7 @@ namespace Core.CrossCuttingConcerns.Exceptions
 
         public async Task Invoke(HttpContext context)
         {
+
             try
             {
                 await _next(context);

@@ -24,9 +24,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public void Add([FromBody] Product product)
+        public async Task Add([FromBody] Product product)
         {
-            productService.Add(product);
+            await productService.Add(product);
         }
 
 

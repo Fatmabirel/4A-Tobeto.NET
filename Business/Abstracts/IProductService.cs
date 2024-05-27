@@ -11,9 +11,9 @@ namespace Business.Abstracts
     {
         Product GetById(int id);
         Task<List<Product>> GetAll();
-        void Add(Product product);
-        void Update(Product product);
-        void Delete(Product product);
+        Task Add(Product product);
+        Task Update(Product product);
+        Task Delete(Product product);
 
     }
 }

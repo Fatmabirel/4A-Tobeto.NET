@@ -20,7 +20,7 @@ namespace Business.Concretes
         }
 
         
-        public async void Add(Product product)
+        public async Task Add(Product product)
         {
             if (product.UnitPrice < 0)
                 throw new BusinessException("Ürün fiyatı 0'dan küçük olamaz.");
@@ -39,7 +39,7 @@ namespace Business.Concretes
 
         }
 
-        public void Delete(Product product)
+        public async Task Delete(Product product)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +54,7 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
-        public void Update(Product product)
+        public async Task Update(Product product)
         {
             throw new NotImplementedException();
         }

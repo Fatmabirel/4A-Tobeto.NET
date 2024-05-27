@@ -12,6 +12,7 @@ namespace Core.CrossCuttingConcerns.Exceptions.Extensions
         public static void ConfigureExceptionMiddlewareExtensions(this IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+
         }
     }
 }
