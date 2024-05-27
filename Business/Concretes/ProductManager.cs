@@ -19,14 +19,14 @@ namespace Business.Concretes
         }
 
         
-        public void Add(Product product)
+        public async void Add(Product product)
         {
             if (product.UnitPrice < 0)
                 throw new Exception("Ürün fiyatı 0'dan küçük olamaz.");
 
             // Aynı isimde 2. ürün eklenemez.
 
-            Product? productWithSameName = _productRepository.Get(p => p.Name == product.Name);
+            Product? productWithSameName = await _productRepository.GetAsync(p => p.Name == product.Name);
             if (productWithSameName is not null)
                 throw new Exception("Aynı isimde 2. ürün eklenemez.");
 
@@ -34,7 +34,7 @@ namespace Business.Concretes
             // Global Ex. Handling.
             // Pipeline Mediator pattern ??
 
-            _productRepository.Add(product);
+           await _productRepository.AddAsync(product);
 
         }
 
@@ -43,10 +43,9 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            return _productRepository.GetList();
-
+            return await _productRepository.GetListAsync();
         }
 
         public Product GetById(int id)

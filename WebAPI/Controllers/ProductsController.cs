@@ -18,9 +18,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            return productService.GetAll();
+            return await productService.GetAll();
         }
 
         [HttpPost]
