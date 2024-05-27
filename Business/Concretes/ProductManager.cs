@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 using Entities;
 using System;
@@ -22,7 +23,7 @@ namespace Business.Concretes
         public async void Add(Product product)
         {
             if (product.UnitPrice < 0)
-                throw new Exception("Ürün fiyatı 0'dan küçük olamaz.");
+                throw new BusinessException("Ürün fiyatı 0'dan küçük olamaz.");
 
             // Aynı isimde 2. ürün eklenemez.
 
