@@ -1,8 +1,12 @@
 ﻿using Business.Abstracts;
 using Business.Concretes;
-using Business.Dtos.Product.Requests;
-using Business.Dtos.Product.Responses;
+using Business.Features.Products.Commands.Create;
+using Business.Features.Products.Commands.Delete;
+using Business.Features.Products.Commands.Update;
+using Business.Features.Products.Queries.GetById;
+using Business.Features.Products.Queries.GetList;
 using Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,25 +16,47 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        IProductService productService; // ❌❌❌
+        private readonly IMediator _mediator;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IMediator mediator)
         {
-            this.productService = productService;
+            _mediator = mediator;
+        }        
+
+        [HttpPost]
+        public async Task Add([FromBody] CreateProductCommand command)
+        {
+            await _mediator.Send(command);
         }
 
         [HttpGet]
-        public async Task<List<ListProductResponse>> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetListQuery query)
         {
-            return await productService.GetAll();
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            GetByIdQuery query = new() { Id = id };
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
-        [HttpPost]
-        public async Task Add([FromBody] AddProductRequest product)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await productService.Add(product);
+            DeleteProductCommand command = new() { Id = id };
+            await _mediator.Send(command);
+            return Ok(); // Refactor
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateProductCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
 
     }
 }
