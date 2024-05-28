@@ -1,6 +1,8 @@
-﻿using Core.CrossCuttingConcerns.Exceptions.Types;
+﻿using Core.CrossCuttingConcerns.Exceptions.HttpProblemDetails;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using System.Text.Json;
 
 
 namespace Core.CrossCuttingConcerns.Exceptions
@@ -27,17 +29,18 @@ namespace Core.CrossCuttingConcerns.Exceptions
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-                string errorMessage;
                 if (exception is BusinessException)
                 {
-                    errorMessage = exception.Message;
+                    ProblemDetails problemDetails = new ProblemDetails();
+                    problemDetails.Title = "Business Rule Violation";
+                    problemDetails.Detail = exception.Message;
+                    problemDetails.Type = "BusinessException";
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
                 }
                 else
                 {
-                    errorMessage = "Bilinmedik Hata";
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 }
-                await context.Response.WriteAsync(errorMessage);
 
             }
         }
