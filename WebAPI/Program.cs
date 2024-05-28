@@ -5,6 +5,9 @@ using DataAccess.Abstracts;
 using DataAccess.Concretes.EntityFramework;
 using Microsoft.AspNetCore.Authentication;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
+using System.Reflection;
+using Business;
+using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +23,9 @@ builder.Services.AddSwaggerGen();
 // Scoped => (API iste�i) �stek ba��na 1 instance olu�turur.
 
 // Transient => Her ad�mda (her talepte) yeni 1 instance.
-builder.Services.AddScoped<IProductService, ProductManager>();
-builder.Services.AddScoped<IProductRepository, EfProductRepository>();
-builder.Services.AddDbContext<BaseDbContext>();
+
+builder.Services.AddBusinessServices();
+builder.Services.AddDataAccessServices();
 
 var app = builder.Build();
 
