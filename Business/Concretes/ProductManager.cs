@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstracts;
-using Business.Dtos.Product;
+using Business.Dtos.Product.Requests;
+using Business.Dtos.Product.Responses;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 using Entities;
@@ -14,8 +15,8 @@ namespace Business.Concretes
 {
     public class ProductManager : IProductService
     {
-        IProductRepository _productRepository;
-        IMapper _mapper; 
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper; 
 
         public ProductManager(IProductRepository productRepository, IMapper mapper)
         {
@@ -24,7 +25,7 @@ namespace Business.Concretes
         }
 
         
-        public async Task Add(ProductForAddDto dto)
+        public async Task Add(AddProductRequest dto)
         {
             if (dto.UnitPrice < 0)
                 throw new BusinessException("Ürün fiyatı 0'dan küçük olamaz.");
@@ -46,11 +47,11 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
-        public async Task<List<ProductForListingDto>> GetAll()
+        public async Task<List<ListProductResponse>> GetAll()
         {
             List<Product> products = await _productRepository.GetListAsync();
 
-            List<ProductForListingDto> response = _mapper.Map<List<ProductForListingDto>>(products);
+            List<ListProductResponse> response = _mapper.Map<List<ListProductResponse>>(products);
             return response;
         }
 
