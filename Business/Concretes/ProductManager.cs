@@ -49,27 +49,9 @@ namespace Business.Concretes
         public async Task<List<ProductForListingDto>> GetAll()
         {
             List<Product> products = await _productRepository.GetListAsync();
-            //List<ProductForListingDto> response = new List<ProductForListingDto>();
 
-            //foreach (Product product in products)
-            //{
-            //    ProductForListingDto dto = new();
-            //    dto.Name = product.Name;
-            //    dto.UnitPrice = product.UnitPrice;
-            //    dto.Id = product.Id;
-            //    response.Add(dto);  
-            //}
-
-            // Manual Mapping
-            // AutoMapping
-            List<ProductForListingDto> response = products.Select(p => new ProductForListingDto()
-            {
-                Id = p.Id,
-                Name = p.Name,
-                UnitPrice = p.UnitPrice,
-            }).ToList();
+            List<ProductForListingDto> response = _mapper.Map<List<ProductForListingDto>>(products);
             return response;
-
         }
 
         public Product GetById(int id)
