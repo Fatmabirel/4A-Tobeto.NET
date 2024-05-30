@@ -1,5 +1,8 @@
 ﻿using Business.Abstracts;
 using Business.Concretes;
+using Core.Application.Pipelines.Logging;
+using Core.Application.Pipelines.Validation;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,10 +19,14 @@ namespace Business
         {
             services.AddMediatR(config => {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                // Sıralama!
+                config.AddOpenBehavior(typeof(LoggingBehavior<,>)); //mediator validatorbehavior'u devreye alması içi
+                config.AddOpenBehavior(typeof(ValidationBehavior<,>)); //mediator validatorbehavior'u devreye alması içi
             });
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;
         }
     }

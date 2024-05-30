@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstracts;
+using Core.Application.Pipelines.Logging;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 using Entities;
@@ -15,7 +16,7 @@ using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.Validatio
 
 namespace Business.Features.Products.Commands.Create
 {
-    public class CreateProductCommand : IRequest
+    public class CreateProductCommand : IRequest<CreateProductResponse>, ILoggableRequest
     {
         public string Name { get; set; }
         public double UnitPrice { get; set; }
@@ -23,7 +24,7 @@ namespace Business.Features.Products.Commands.Create
         public int CategoryId { get; set; }
 
 
-        public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
+        public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
         {
             private readonly IProductRepository _productRepository;
             private readonly ICategoryService _categoryService;
@@ -37,27 +38,14 @@ namespace Business.Features.Products.Commands.Create
                 _categoryService = categoryService;
             }
 
-            public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
+            public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
             {
-
-
-                IValidator<CreateProductCommand> validator = new CreateProductCommandValidator();
-
-                // validator.ValidateAndThrow(request); // kendi ex. fırlatacak.
-
-                ValidationResult result = validator.Validate(request); // Validation'ı yapıcak. Sonucu vericek.
-
-                if (!result.IsValid)
-                {
-                    throw new ValidationException(result.Errors.Select(i => i.ErrorMessage).ToList());
-                }
-
-                Category? category = await _categoryService.GetByIdAsync(request.CategoryId);
-                if (category is null)
-                    throw new BusinessException("Böyle bir kategori bulunamadı.");
 
                 Product product = _mapper.Map<Product>(request);
                 await _productRepository.AddAsync(product);
+
+                CreateProductResponse response = _mapper.Map<CreateProductResponse>(product);
+                return response;
             }
         }
     }
